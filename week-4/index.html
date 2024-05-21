@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script>
+    let globalId = 1;
+    let todoState = [];
+    let oldTodoState = [];
+
+    function addTodoToDom(newtodo) {
+      console.log(newtodo);
+      const divEle = document.getElementById('todos');
+      const todoDiv = document.createElement('div')
+      todoDiv.id = globalId;
+      todoDiv.style.border = '1px solid black';
+      todoDiv.style.padding = '5px'
+      const btn = document.createElement('button');
+      btn.id = `${globalId}_btn`;
+      btn.textContent = "Mark as Complete";
+      btn.onclick = () => removeTodoFromDom(todoDiv.id)
+      const listStyle = 'style="list-style-type: none; margin-left: 0; padding-left: 0"'
+      todoDiv.innerHTML = `<div><ol ${listStyle}><li>Title: ${newtodo.title}</li><li> Description: ${newtodo.description}</li></ol></div>`
+      todoDiv.appendChild(btn)
+      divEle.appendChild(todoDiv)  
+    }
+
+    function removeTodoFromDom(todoID) {
+      const divEle = document.getElementById('todos');
+      divEle.removeChild(document.getElementById(todoID))
+    }
+
+    function updateState(newTodos) {
+      addTodoToDom(newTodos[newTodos.length-1])
+      const added = [];
+      const deleted = [];
+      const updated = [];
+      oldTodoState = newTodos;
+    }
+
+    function addTodo() {
+      const title = document.getElementById("title").value;
+      const description = document.getElementById("description").value;
+      todoState.push({
+        title: title,
+        description: description,
+        id: globalId++,
+      })
+      updateState(todoState);
+    }
+  </script>
+</head>
+
+<body>
+  <input type="text" id="title" placeholder="Todo title"></input> <br /><br />
+  <input type="text" id="description" placeholder="Todo description"></input> <br /><br />
+  <button onclick="addTodo()">Add todo</button>
+  <br /> <br />
+
+  <div id="todos">
+
+  </div>
+</body>
+
+</html>
